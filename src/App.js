@@ -29,6 +29,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import MultiSelectControl from "./multi-select-control";
+import { Formik } from "formik";
 
 function MyMultipleSelectMenu() {
   return (
@@ -91,6 +92,8 @@ function App() {
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");
   const onSubmit = (data) => setResult(JSON.stringify(data));
+  const initialValues = {};
+  const [formValues, setFormValues] = useState(initialValues);
   const users = [
     {
       label: "jennifer.lin2@hp.com",
@@ -107,18 +110,38 @@ function App() {
   ];
   return (
     <ChakraProvider>
-      <p>Submit result: {result}</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl>
-          <Box w={80}>
-            <MultiSelectControl
-              controlProps={{ name: "multiSelections", label: "" }}
-              options={users}
-            />
-          </Box>
-        </FormControl>
-        <input type="submit" />
-      </form>
+      <p>Submit result: {JSON.stringify(formValues)}</p>
+      <Formik
+        initialValues={formValues}
+        onSubmit={(values) => {
+          setFormValues(values);
+          console.log(JSON.stringify(values));
+        }}
+      >
+        {({
+          values,
+          touched,
+          errors,
+          dirty,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+        }) => (
+          <>
+            <Box as="form" w={80} onSubmit={handleSubmit}>
+              <MultiSelectControl
+                controlProps={{ name: "multiSelections", label: "" }}
+                options={users}
+              />
+            </Box>
+          </>
+        )}
+      </Formik>
+      <Button colorScheme="blue" mr={3} onClick={onSubmit}>
+        Submit
+      </Button>
     </ChakraProvider>
     // <ChakraProvider>
     //     <Flex>
