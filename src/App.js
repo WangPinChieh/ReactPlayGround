@@ -111,7 +111,10 @@ function App() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
           <Box w={80}>
-            <MultiSelectControl />
+            <MultiSelectControl
+              controlProps={{ name: "multiSelections", label: "" }}
+              options={users}
+            />
           </Box>
         </FormControl>
         <input type="submit" />
