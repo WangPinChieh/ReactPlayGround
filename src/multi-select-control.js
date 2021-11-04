@@ -33,7 +33,7 @@ function MultiSelectControl({ controlProps, options, placeholder }) {
 	const optionsMap = lodash.groupBy(lodash.cloneDeep(options), option => {
 		return option.value;
 	});
-	let mappedSelectedOptions = lodash
+	const mappedSelectedOptions = lodash
 		.cloneDeep(values[name] ?? [])
 		.map(option => {
 			return optionsMap[option]?.[0];

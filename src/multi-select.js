@@ -26,7 +26,7 @@ function MultiSelect({ options, placeholder, value, onChange }) {
 	const optionsMap = lodash.groupBy(lodash.cloneDeep(options), option => {
 		return option.value;
 	});
-	let mappedSelectedOptions = lodash.cloneDeep(value ?? []).map(option => {
+	const mappedSelectedOptions = lodash.cloneDeep(value ?? []).map(option => {
 		return optionsMap[option]?.[0];
 	});
 	const _handleChange = selectedOptions => {
