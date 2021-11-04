@@ -8,7 +8,7 @@ function MultiSelect({ options, value, onChange, ...props }) {
     return option.value;
   });
   const mappedDefaultSelectedOptions = lodash.cloneDeep(value ?? []).map((option) => {
-    return optionsMap[option][0];
+    return optionsMap[option]?.[0];
   });
 
   const _handleChange = (selectedOptions) => {

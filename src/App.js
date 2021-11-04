@@ -90,8 +90,8 @@ function MyModal() {
 }
 function App() {
   const { register, handleSubmit } = useForm();
-  const [result, setResult] = useState([]);
-  // const [result, setResult] = useState(["jenniferId", "listId"]);
+  // const [result, setResult] = useState([]);
+  const [result, setResult] = useState(["jenniferId", "listId"]);
   const onSubmit = (data) => setResult(JSON.stringify(data));
   const initialValues = {};
   const [formValues, setFormValues] = useState(initialValues);
