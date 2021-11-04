@@ -115,9 +115,9 @@ function App() {
       <MultiSelect
         options={users}
         value={result}
-        onChange={(value) => {
-          setResult(value);
-        }}
+        // onChange={(value) => {
+        //   setResult(value);
+        // }}
       />
     </>
     // <ChakraProvider>
