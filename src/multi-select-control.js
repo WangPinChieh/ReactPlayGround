@@ -1,25 +1,71 @@
-import React from "react";
-import { FormControl } from "@chakra-ui/react";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { useField } from "formik";
-function MultiSelectControl({ controlProps, ...rest }) {
-  const { name } = controlProps;
-  const [field] = useField(name);
+import React from 'react';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import lodash from 'lodash';
+import PropTypes from 'prop-types';
+// Import { FormControl } from '@chakra-ui/react';
+import FormControl from './form-control';
+import { useField, useFormikContext } from 'formik';
 
-  const animatedComponents = makeAnimated();
-  return (
-    <FormControl>
-      <Select
-        id={name}
-        // {...field}
-        closeMenuOnSelect={false}
-        components={animatedComponents}
-        isMulti={true}
-        {...rest}
-      />
-    </FormControl>
-  );
+const propTypes = {
+	controlProps: PropTypes.shape({
+		name: PropTypes.string,
+		label: PropTypes.string,
+	}),
+	options: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.string,
+			label: PropTypes.string,
+		}),
+	),
+	value: PropTypes.arrayOf(PropTypes.string),
+	placeholder: PropTypes.string,
+};
+const defaultProps = {
+	onChange: () => {},
+	options: [],
+	value: [],
+	placeholder: '',
+};
+
+function MultiSelectControl({ controlProps, options, placeholder }) {
+	const { name } = controlProps;
+	const [field] = useField(name);
+	const { values, setFieldValue } = useFormikContext();
+	const optionsMap = lodash.groupBy(lodash.cloneDeep(options), option => {
+		return option.value;
+	});
+	let mappedSelectedOptions = lodash
+		.cloneDeep(values[name] ?? [])
+		.map(option => {
+			return optionsMap[option]?.[0];
+		});
+	const _handleChange = selectedOptions => {
+		let mappedOptions = selectedOptions.map(option => {
+			return option.value;
+		});
+
+		setFieldValue(name, mappedOptions);
+	};
+
+	return (
+		<FormControl {...controlProps}>
+			<Select
+				id={name}
+				{...field}
+				closeMenuOnSelect={false}
+				components={makeAnimated()}
+				isMulti
+				options={options}
+				onChange={_handleChange}
+				value={mappedSelectedOptions}
+				placeholder={placeholder}
+			/>
+		</FormControl>
+	);
 }
+
+MultiSelectControl.propTypes = propTypes;
+MultiSelectControl.defaultProps = defaultProps;
 
 export default MultiSelectControl;
