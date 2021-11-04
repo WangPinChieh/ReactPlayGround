@@ -30,7 +30,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import MultiSelectControl from "./multi-select-control";
 import { Formik } from "formik";
-
+import MultiSelect from "./multi-select";
 function MyMultipleSelectMenu() {
   return (
     <Menu closeOnSelect={false}>
@@ -90,7 +90,7 @@ function MyModal() {
 }
 function App() {
   const { register, handleSubmit } = useForm();
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(["jenniferId", "listId"]);
   const onSubmit = (data) => setResult(JSON.stringify(data));
   const initialValues = {};
   const [formValues, setFormValues] = useState(initialValues);
@@ -109,40 +109,51 @@ function App() {
     },
   ];
   return (
-    <ChakraProvider>
-      <p>Submit result: {JSON.stringify(formValues)}</p>
-      <Formik
-        initialValues={formValues}
-        onSubmit={(values) => {
-          setFormValues(values);
-          console.log(JSON.stringify(values));
+    <>
+      <div>{JSON.stringify(result)}</div>
+      <MultiSelect
+        options={users}
+        value={result}
+        onChange={(value) => {
+          setResult(value);
         }}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset,
-        }) => (
-          <>
-            <Box as="form" w={80} onSubmit={handleSubmit}>
-              <MultiSelectControl
-                controlProps={{ name: "multiSelections", label: "" }}
-                options={users}
-              />
-            </Box>
-          </>
-        )}
-      </Formik>
-      <Button colorScheme="blue" mr={3} onClick={onSubmit}>
-        Submit
-      </Button>
-    </ChakraProvider>
+      />
+    </>
+    // <ChakraProvider>
+    //   <p>Submit result: {JSON.stringify(formValues)}</p>
+    //   <Formik
+    //     initialValues={formValues}
+    //     onSubmit={(values) => {
+    //       setFormValues(values);
+    //       console.log(JSON.stringify(values));
+    //     }}
+    //   >
+    //     {({
+    //       values,
+    //       touched,
+    //       errors,
+    //       dirty,
+    //       isSubmitting,
+    //       handleChange,
+    //       handleBlur,
+    //       handleSubmit,
+    //       handleReset,
+    //     }) => (
+    //       <>
+    //         <Box as="form" w={80} onSubmit={handleSubmit}>
+    //           <MultiSelectControl
+    //             controlProps={{ name: "multiSelections", label: "" }}
+    //             options={users}
+    //           />
+    //         </Box>
+    //       </>
+    //     )}
+    //   </Formik>
+    //   <Button colorScheme="blue" mr={3} onClick={onSubmit}>
+    //     Submit
+    //   </Button>
+    // </ChakraProvider>
+
     // <ChakraProvider>
     //     <Flex>
     //       <Box>
