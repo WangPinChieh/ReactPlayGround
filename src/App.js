@@ -1,92 +1,42 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
-import TextInput from "./text-input";
+import React, {useContext} from 'react';
+import { format } from 'date-fns';
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee"
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222"
+  }
+};
 
+const ThemeContext = React.createContext(themes.light);
 export default function App() {
   return (
-    <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/topics">Topics</Link>
-          </li>
-        </ul>
-
-        <Switch>
-          <Route path="/about">
-            <About component={TextInput} />
-          </Route>
-          <Route path="/topics">
-            <Topics />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <ThemeContext.Provider value={themes.dark}>
+      <>
+      
+      {format(new Date('2021-11-11T13:14:12'), 'yyyy-MM-dd HH:mm:ss')}
+      </>
+      <Toolbar />
+    </ThemeContext.Provider>
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About({component: InputComponent}) {
-  return (
-    <>
-      <h2>About</h2>
-      <InputComponent inputType="text" />
-    </>
-  );
-}
-
-function Topics() {
-  let match = useRouteMatch();
-
+function Toolbar(props) {
   return (
     <div>
-      <h2>Topics</h2>
-
-      <ul>
-        <li>
-          <Link to={`${match.url}/components`}>Components</Link>
-        </li>
-        <li>
-          <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-        </li>
-      </ul>
-
-      {/* The Topics page has its own <Switch> with more routes
-          that build on the /topics URL path. You can think of the
-          2nd <Route> here as an "index" page for all topics, or
-          the page that is shown when no topic is selected */}
-      <Switch>
-        <Route path={`${match.path}/:topicId`}>
-          <Topic />
-        </Route>
-        <Route path={match.path}>
-          <h3>Please select a topic.</h3>
-        </Route>
-      </Switch>
+      <ThemedButton />
     </div>
   );
 }
 
-function Topic() {
-  let { topicId } = useParams();
-  return <h3>Requested topic ID: {topicId}</h3>;
+function ThemedButton() {
+  const theme = useContext(ThemeContext);
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
 }
